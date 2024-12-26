@@ -1,5 +1,9 @@
-import { type AxiosRequestConfig } from "axios";
-import { Api } from "../../api/generated/Api";
+import axios, { type AxiosRequestConfig } from "axios";
+import {
+  errorInterceptor,
+  requestInterceptor,
+  successInterceptor,
+} from "./interceptors";
 
 const CONFIG: AxiosRequestConfig = {
   baseURL: "https://petstore.swagger.io/v2",
@@ -10,4 +14,9 @@ const CONFIG: AxiosRequestConfig = {
   },
 };
 
-export const apiClient = new Api(CONFIG);
+const apiClient = axios.create(CONFIG);
+
+apiClient.interceptors.request.use(requestInterceptor);
+apiClient.interceptors.response.use(successInterceptor, errorInterceptor);
+
+export default apiClient;

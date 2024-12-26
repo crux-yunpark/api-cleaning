@@ -29,14 +29,12 @@ export const requestInterceptor = (
  * @param {AxiosResponse} response - Axios의 응답 객체.
  * @returns {AxiosResponse} 변경되지 않은 응답 객체.
  */
-export const successInterceptor = {
-  vd: (response: AxiosResponse) => {
-    if (response.data.status === -1) {
-      throw new CustomError(response.data.message, response.data.status);
-    }
+export const successInterceptor = (response: AxiosResponse) => {
+  if (response.data.status === -1) {
+    throw new CustomError(response.data.message, response.data.status);
+  }
 
-    return response;
-  },
+  return response;
 };
 
 /**

@@ -1,8 +1,13 @@
 import { apiClient } from "../config/api";
 
 class PetService {
-  "pet/{petId}"(id: number) {
-    return apiClient.get(`/pet/${id}`);
+  "/store/inventory"(
+    parameter: paths["/store/inventory"]["get"]["parameters"]
+  ) {
+    return apiClient.get<paths["/store/inventory"]["get"]["response"]>(
+      "/store/inventory",
+      { params: parameter }
+    );
   }
 }
 
