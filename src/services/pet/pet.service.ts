@@ -1,13 +1,17 @@
-import { apiClient } from "../config/api";
+import apiClient from "../config/api";
+import { ReqSelector, ResSelector } from "../config/types/typeUtils";
 
 class PetService {
-  "/store/inventory"(
-    parameter: paths["/store/inventory"]["get"]["parameters"]
-  ) {
-    return apiClient.get<paths["/store/inventory"]["get"]["response"]>(
-      "/store/inventory",
-      { params: parameter }
+  getPet(parameters: ReqSelector<"/pet/{petId}">) {
+    return apiClient.get<ResSelector<"/pet/{petId}">>(
+      `/pet/${parameters.path.petId}`
     );
+  }
+
+  getPetList(parameters: ReqSelector<"/pets", "get">) {
+    return apiClient.get<ResSelector<"/pets", "get">>("/pets", {
+      params: parameters.query,
+    });
   }
 }
 

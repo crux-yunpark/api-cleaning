@@ -1,5 +1,6 @@
 import { type APIComponents } from "../config/types/base";
 import {
+  DeleteDTO,
   GetDTO,
   PostDTO,
   ReqSelector,
@@ -28,8 +29,23 @@ export type PetAPIPaths = {
       },
       APIResponse<APIComponents["Pet"]>
     >;
+
+    delete: DeleteDTO<never, never>;
+  };
+
+  "/pets": {
+    get: GetDTO<
+      {
+        query: {
+          status: string;
+          startDate: string;
+        };
+      },
+      APIResponse<APIComponents["Pet"][]>
+    >;
   };
 };
 
-type GetPetRes = ResSelector<"/pet/{petId}">;
 type GetPetReq = ReqSelector<"/pet/{petId}">;
+type GetPetRes = ResSelector<"/pet/{petId}">;
+type PostPetReq = ReqSelector<"/pets", "get">;
