@@ -49,10 +49,19 @@ export type PatchDTO<
   TResponse = unknown
 > = BaseEndPoint<TParams, TBody, TResponse>;
 
+// get이 있으면 get을, 없으면 첫 번째 메서드를 반환하는 유틸리티 타입
+type PreferGetMethod<TPath> = "get" extends keyof TPath
+  ? "get"
+  : keyof TPath extends infer K
+  ? K extends string
+    ? K
+    : never
+  : never;
+
 // 파라미터 선택자
 export type ReqSelector<
   TParam extends keyof APIPaths,
-  TMethod extends keyof APIPaths[TParam] = "get"
+  TMethod extends keyof APIPaths[TParam] = PreferGetMethod<APIPaths[TParam]>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 > = APIPaths[TParam][TMethod] extends BaseEndPoint<infer Params, any, any>
   ? Params
@@ -60,7 +69,7 @@ export type ReqSelector<
 
 export type ResSelector<
   TParam extends keyof APIPaths,
-  TMethod extends keyof APIPaths[TParam] = "get"
+  TMethod extends keyof APIPaths[TParam] = PreferGetMethod<APIPaths[TParam]>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 > = APIPaths[TParam][TMethod] extends BaseEndPoint<any, any, infer Response>
   ? Response

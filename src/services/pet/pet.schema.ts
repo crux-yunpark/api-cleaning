@@ -1,11 +1,9 @@
-import { type APIComponents } from "../config/types/base";
-import {
-  DeleteDTO,
+import type { APIComponents } from "../config/types/base";
+import type {
   GetDTO,
   PostDTO,
-  ReqSelector,
-  ResSelector,
-  type APIResponse,
+  PutDTO,
+  DeleteDTO,
 } from "../config/types/typeUtils";
 
 export type PetAPIPaths = {
@@ -15,7 +13,7 @@ export type PetAPIPaths = {
         query: never;
         path: { petId: number };
       },
-      APIResponse<APIComponents["Pet"]>
+      APIComponents["Pet"]
     >;
 
     post: PostDTO<
@@ -27,25 +25,37 @@ export type PetAPIPaths = {
         name: string;
         status: string;
       },
-      APIResponse<APIComponents["Pet"]>
+      APIComponents["Pet"]
     >;
 
-    delete: DeleteDTO<never, never>;
+    delete: DeleteDTO<{ path: { petId: number } }, never>;
   };
 
-  "/pets": {
+  "/pet/{petId}/uploadImage": {
+    post: PostDTO<
+      {
+        path: { petId: number };
+      },
+      {
+        additionalMetadata?: string;
+        file: File;
+      },
+      { code: number; type: string; message: string }
+    >;
+  };
+
+  "/pet": {
+    post: PostDTO<never, APIComponents["Pet"], APIComponents["Pet"]>;
+
+    put: PutDTO<never, APIComponents["Pet"], APIComponents["Pet"]>;
+  };
+
+  "/pet/findByStatus": {
     get: GetDTO<
       {
-        query: {
-          status: string;
-          startDate: string;
-        };
+        query: { status: APIComponents["Pet"]["status"][] };
       },
-      APIResponse<APIComponents["Pet"][]>
+      APIComponents["Pet"][]
     >;
   };
 };
-
-type GetPetReq = ReqSelector<"/pet/{petId}">;
-type GetPetRes = ResSelector<"/pet/{petId}">;
-type PostPetReq = ReqSelector<"/pets", "get">;

@@ -1,4 +1,6 @@
 import { PetAPIPaths } from "../../pet/pet.schema";
+import { StoreAPIPaths } from "../../store/store.schema";
+import { UserAPIPaths } from "../../user/user.schema";
 
 export type APIComponents = {
   YesOrNo: "Y" | "N";
@@ -59,4 +61,4 @@ export type APIComponents = {
   };
 };
 
-export type APIPaths = PetAPIPaths;
+export type APIPaths = PetAPIPaths & StoreAPIPaths & UserAPIPaths;
