@@ -1,5 +1,5 @@
-import type { APIComponents } from "../config/types/base";
-import type { GetDTO, PostDTO } from "../config/types/typeUtils";
+import type { APIComponents } from "../types/base";
+import type { GetDTO, PostDTO } from "../types/typeUtils";
 
 export type StoreAPIPaths = {
   "/store/inventory": {

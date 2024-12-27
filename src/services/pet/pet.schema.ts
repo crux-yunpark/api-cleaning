@@ -1,10 +1,5 @@
-import type { APIComponents } from "../config/types/base";
-import type {
-  GetDTO,
-  PostDTO,
-  PutDTO,
-  DeleteDTO,
-} from "../config/types/typeUtils";
+import type { APIComponents } from "../types/base";
+import type { GetDTO, PostDTO, PutDTO, DeleteDTO } from "../types/typeUtils";
 
 export type PetAPIPaths = {
   "/pet/{petId}": {
@@ -46,7 +41,6 @@ export type PetAPIPaths = {
 
   "/pet": {
     post: PostDTO<never, APIComponents["Pet"], APIComponents["Pet"]>;
-
     put: PutDTO<never, APIComponents["Pet"], APIComponents["Pet"]>;
   };
 

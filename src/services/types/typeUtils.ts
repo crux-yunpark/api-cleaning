@@ -58,19 +58,38 @@ type PreferGetMethod<TPath> = "get" extends keyof TPath
     : never
   : never;
 
+type PreferPostMethod<TPath> = "post" extends keyof TPath
+  ? "post"
+  : keyof TPath extends infer K
+  ? K extends "put"
+    ? K
+    : never
+  : never;
+
 // 파라미터 선택자
 export type ReqSelector<
-  TParam extends keyof APIPaths,
-  TMethod extends keyof APIPaths[TParam] = PreferGetMethod<APIPaths[TParam]>
+  TPath extends keyof APIPaths,
+  TMethod extends keyof APIPaths[TPath] = PreferGetMethod<APIPaths[TPath]>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-> = APIPaths[TParam][TMethod] extends BaseEndPoint<infer Params, any, any>
+> = APIPaths[TPath][TMethod] extends BaseEndPoint<infer Params, any, any>
   ? Params
   : never;
 
 export type ResSelector<
-  TParam extends keyof APIPaths,
-  TMethod extends keyof APIPaths[TParam] = PreferGetMethod<APIPaths[TParam]>
+  TPath extends keyof APIPaths,
+  TMethod extends keyof APIPaths[TPath] = PreferGetMethod<APIPaths[TPath]>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-> = APIPaths[TParam][TMethod] extends BaseEndPoint<any, any, infer Response>
+> = APIPaths[TPath][TMethod] extends BaseEndPoint<any, any, infer Response>
   ? Response
+  : never;
+
+// Request Body 선택자 추가
+export type BodySelector<
+  TPath extends keyof APIPaths,
+  TMethod extends keyof APIPaths[TPath] = PreferPostMethod<APIPaths[TPath]>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+> = APIPaths[TPath][TMethod] extends BaseEndPoint<any, infer Body, any>
+  ? Body extends never
+    ? never
+    : Body
   : never;

@@ -1,10 +1,5 @@
-import type { APIComponents } from "../config/types/base";
-import type {
-  GetDTO,
-  PostDTO,
-  DeleteDTO,
-  PutDTO,
-} from "../config/types/typeUtils";
+import type { APIComponents } from "../types/base";
+import type { GetDTO, PostDTO, DeleteDTO, PutDTO } from "../types/typeUtils";
 
 export type UserAPIPaths = {
   "/user": {
