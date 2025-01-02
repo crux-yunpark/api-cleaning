@@ -1,5 +1,5 @@
-import apiClient from "../config/api";
-import { BodySelector, ReqSelector, ResSelector } from "../types/typeUtils";
+import { BodySelector, ReqSelector } from "../types/typeUtils";
+import { createApi } from "../utils/endpoints";
 
 class PetService {
   /**
@@ -15,9 +15,7 @@ class PetService {
    * @returns Promise<APIComponents["Pet"]>
    */
   getPet(parameters: ReqSelector<"/pet/{petId}">) {
-    return apiClient.get<ResSelector<"/pet/{petId}">>(
-      `/pet/${parameters.path.petId}`
-    );
+    return createApi("/pet/{petId}", "get")({ parameters });
   }
 
   /**
@@ -26,10 +24,7 @@ class PetService {
    * @returns Promise<APIComponents["Pet"][]>
    */
   getPetsByStatus(parameters: ReqSelector<"/pet/findByStatus">) {
-    return apiClient.get<ResSelector<"/pet/findByStatus">>(
-      "/pet/findByStatus",
-      { params: parameters.query }
-    );
+    return createApi("/pet/findByStatus", "get")({ parameters });
   }
 
   /**
@@ -44,8 +39,8 @@ class PetService {
    * @param body 반려동물 정보
    * @returns Promise<APIComponents["Pet"]>
    */
-  postPetCreate(body: BodySelector<"/pet", "post">) {
-    return apiClient.post<ResSelector<"/pet", "post">>("/pet", body);
+  postPetCreate({ body }: { body: BodySelector<"/pet", "post"> }) {
+    return createApi("/pet", "post")({ body });
   }
 
   /**
@@ -58,10 +53,7 @@ class PetService {
     parameters: ReqSelector<"/pet/{petId}", "post">,
     body: BodySelector<"/pet/{petId}", "post">
   ) {
-    return apiClient.post<ResSelector<"/pet/{petId}", "post">>(
-      `/pet/${parameters.path.petId}`,
-      body
-    );
+    return createApi("/pet/{petId}", "post")({ parameters, body });
   }
 
   /**
@@ -70,25 +62,14 @@ class PetService {
    * @param body 이미지 파일과 메타데이터
    * @returns Promise<{ code: number; type: string; message: string }>
    */
-  postPetImage(
-    parameters: ReqSelector<"/pet/{petId}/uploadImage", "post">,
-    body: BodySelector<"/pet/{petId}/uploadImage", "post">
-  ) {
-    const formData = new FormData();
-    if (body.additionalMetadata) {
-      formData.append("additionalMetadata", body.additionalMetadata);
-    }
-    formData.append("file", body.file);
-
-    return apiClient.post<ResSelector<"/pet/{petId}/uploadImage", "post">>(
-      `/pet/${parameters.path.petId}/uploadImage`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+  postPetImage({
+    parameters,
+    body,
+  }: {
+    parameters: ReqSelector<"/pet/{petId}/uploadImage", "post">;
+    body: BodySelector<"/pet/{petId}/uploadImage", "post">;
+  }) {
+    return createApi("/pet/{petId}/uploadImage", "post")({ parameters, body });
   }
 
   /**
@@ -103,8 +84,8 @@ class PetService {
    * @param body 업데이트할 반려동물 정보
    * @returns Promise<APIComponents["Pet"]>
    */
-  putPet(body: BodySelector<"/pet", "put">) {
-    return apiClient.put<ResSelector<"/pet", "put">>("/pet", body);
+  putPet({ body }: { body: BodySelector<"/pet", "put"> }) {
+    return createApi("/pet", "put")({ body });
   }
 
   /**
@@ -120,9 +101,7 @@ class PetService {
    * @returns Promise<void>
    */
   deletePet(parameters: ReqSelector<"/pet/{petId}", "delete">) {
-    return apiClient.delete<ResSelector<"/pet/{petId}", "delete">>(
-      `/pet/${parameters.path.petId}`
-    );
+    return createApi("/pet/{petId}", "delete")({ parameters });
   }
 }
 

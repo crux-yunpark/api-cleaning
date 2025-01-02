@@ -20,7 +20,7 @@ export const useGetStoreOrder = (parameters: ReqSelector<"/store/order">) => {
 export const usePostStoreOrder = (body: BodySelector<"/store/order">) => {
   return useMutation({
     mutationKey: ["store", "order"],
-    mutationFn: () => storeService.postStoreOrder(body),
+    mutationFn: () => storeService.postStoreOrder({ body }),
   });
 };
 

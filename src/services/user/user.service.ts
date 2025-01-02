@@ -1,5 +1,5 @@
-import apiClient from "../config/api";
-import { BodySelector, ReqSelector, ResSelector } from "../types/typeUtils";
+import { BodySelector, ReqSelector } from "../types/typeUtils";
+import { createApi } from "../utils/endpoints";
 
 class UserService {
   /**
@@ -14,7 +14,7 @@ class UserService {
    * @returns Promise<void>
    */
   getUserLogout() {
-    return apiClient.get<ResSelector<"/user/logout">>("/user/logout");
+    return createApi("/user/logout", "get")();
   }
 
   /**
@@ -23,9 +23,7 @@ class UserService {
    * @returns Promise<string> - 로그인 성공 시 세션 토큰 반환
    */
   getUserLogin(parameters: ReqSelector<"/user/login">) {
-    return apiClient.get<ResSelector<"/user/login">>("/user/login", {
-      params: parameters.query,
-    });
+    return createApi("/user/login", "get")({ parameters });
   }
 
   /**
@@ -34,9 +32,7 @@ class UserService {
    * @returns Promise<APIComponents["User"]>
    */
   getUser(parameters: ReqSelector<"/user/{username}">) {
-    return apiClient.get<ResSelector<"/user/{username}">>(
-      `/user/${parameters.path.username}`
-    );
+    return createApi("/user/{username}", "get")({ parameters });
   }
 
   /**
@@ -51,8 +47,8 @@ class UserService {
    * @param body 생성할 사용자 정보
    * @returns Promise<void>
    */
-  postUser(body: BodySelector<"/user", "post">) {
-    return apiClient.post<ResSelector<"/user", "post">>("/user", body);
+  postUser({ body }: { body: BodySelector<"/user", "post"> }) {
+    return createApi("/user", "post")({ body });
   }
 
   /**
@@ -60,11 +56,12 @@ class UserService {
    * @param body 생성할 사용자 정보 배열
    * @returns Promise<void>
    */
-  postUserArray(body: BodySelector<"/user/createWithArray", "post">) {
-    return apiClient.post<ResSelector<"/user/createWithArray", "post">>(
-      "/user/createWithArray",
-      body
-    );
+  postUserArray({
+    body,
+  }: {
+    body: BodySelector<"/user/createWithArray", "post">;
+  }) {
+    return createApi("/user/createWithArray", "post")({ body });
   }
 
   /**
@@ -72,11 +69,12 @@ class UserService {
    * @param body 생성할 사용자 정보 리스트
    * @returns Promise<void>
    */
-  postUserList(body: BodySelector<"/user/createWithList", "post">) {
-    return apiClient.post<ResSelector<"/user/createWithList", "post">>(
-      "/user/createWithList",
-      body
-    );
+  postUserList({
+    body,
+  }: {
+    body: BodySelector<"/user/createWithList", "post">;
+  }) {
+    return createApi("/user/createWithList", "post")({ body });
   }
 
   /**
@@ -92,14 +90,14 @@ class UserService {
    * @param body 업데이트할 사용자 정보
    * @returns Promise<void>
    */
-  putUser(
-    parameters: ReqSelector<"/user/{username}", "put">,
-    body: BodySelector<"/user/{username}", "put">
-  ) {
-    return apiClient.put<ResSelector<"/user/{username}", "put">>(
-      `/user/${parameters.path.username}`,
-      body
-    );
+  putUser({
+    parameters,
+    body,
+  }: {
+    parameters: ReqSelector<"/user/{username}", "put">;
+    body: BodySelector<"/user/{username}", "put">;
+  }) {
+    return createApi("/user/{username}", "put")({ parameters, body });
   }
 
   /**
@@ -115,9 +113,7 @@ class UserService {
    * @returns Promise<void>
    */
   deleteUser(parameters: ReqSelector<"/user/{username}", "delete">) {
-    return apiClient.delete<ResSelector<"/user/{username}", "delete">>(
-      `/user/${parameters.path.username}`
-    );
+    return createApi("/user/{username}", "delete")({ parameters });
   }
 }
 

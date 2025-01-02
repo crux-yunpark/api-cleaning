@@ -1,5 +1,5 @@
-import apiClient from "../config/api";
-import { BodySelector, ReqSelector, ResSelector } from "../types/typeUtils";
+import { BodySelector, ReqSelector } from "../types/typeUtils";
+import { createApi } from "../utils/endpoints";
 
 class StoreService {
   /**
@@ -14,7 +14,7 @@ class StoreService {
    * @returns Promise<Record<string, number>> - 상태별 재고 수량
    */
   getStoreInventory() {
-    return apiClient.get<ResSelector<"/store/inventory">>("/store/inventory");
+    return createApi("/store/inventory", "get")();
   }
 
   /**
@@ -23,9 +23,7 @@ class StoreService {
    * @returns Promise<APIComponents["Order"]>
    */
   getStoreOrder(parameters: ReqSelector<"/store/order/{orderId}">) {
-    return apiClient.get<ResSelector<"/store/order/{orderId}">>(
-      `/store/order/${parameters.path.orderId}`
-    );
+    return createApi("/store/order/{orderId}", "get")({ parameters });
   }
 
   /**
@@ -40,11 +38,8 @@ class StoreService {
    * @param body 주문 정보
    * @returns Promise<APIComponents["Order"]> - 생성된 주문 정보
    */
-  postStoreOrder(body: BodySelector<"/store/order", "post">) {
-    return apiClient.post<ResSelector<"/store/order", "post">>(
-      "/store/order",
-      body
-    );
+  postStoreOrder({ body }: { body: BodySelector<"/store/order", "post"> }) {
+    return createApi("/store/order", "post")({ body });
   }
 
   /**
@@ -60,9 +55,7 @@ class StoreService {
    * @returns Promise<void>
    */
   deleteStoreOrder(parameters: ReqSelector<"/store/order/{orderId}">) {
-    return apiClient.delete<ResSelector<"/store/order/{orderId}", "delete">>(
-      `/store/order/${parameters.path.orderId}`
-    );
+    return createApi("/store/order/{orderId}", "delete")({ parameters });
   }
 }
 
