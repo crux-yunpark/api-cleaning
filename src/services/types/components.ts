@@ -1,7 +1,3 @@
-import { PetAPIPaths } from "../pet/pet.schema";
-import { StoreAPIPaths } from "../store/store.schema";
-import { UserAPIPaths } from "../user/user.schema";
-
 export type APIComponents = {
   YesOrNo: "Y" | "N";
   StoreOptions: string[]; // store option 정의 객체
@@ -60,5 +56,3 @@ export type APIComponents = {
     userStatus?: number;
   };
 };
-
-export type APIPaths = PetAPIPaths & StoreAPIPaths & UserAPIPaths;

@@ -1,4 +1,4 @@
-import { APIPaths } from "./base";
+import { APIPaths } from "./index";
 
 export interface APIResponse<T = unknown> {
   data: T;

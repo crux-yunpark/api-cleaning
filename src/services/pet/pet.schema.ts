@@ -1,4 +1,4 @@
-import type { APIComponents } from "../types/base";
+import type { APIComponents } from "../types/components";
 import type { GetDTO, PostDTO, PutDTO, DeleteDTO } from "../types/typeUtils";
 
 export type PetAPIPaths = {
